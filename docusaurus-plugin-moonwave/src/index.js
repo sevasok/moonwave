@@ -399,6 +399,21 @@ export default (context, options) => ({
       JSON.stringify(typeLinksData)
     )
 
+    // Add raw data endpoint
+    const rawDataPath = await createData(
+      "rawData.json",
+      JSON.stringify(filteredContent)
+    )
+
+    addRoute({
+      path: baseUrl + "api/raw",
+      exact: true,
+      component: resolve(__dirname, "components/RawData.js"),
+      modules: {
+        rawData: rawDataPath,
+      },
+    })
+
     addRoute({
       path: baseUrl + "api/",
       exact: true,

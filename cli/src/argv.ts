@@ -2,6 +2,7 @@ import { createRequire } from "module"
 import yargs from "yargs"
 import buildCommand from "./commands/build.js"
 import devCommand from "./commands/dev.js"
+import deployMcpCommand from "./commands/deploy-mcp.js"
 
 const require = createRequire(import.meta.url)
 
@@ -13,6 +14,9 @@ export interface Args {
   install: boolean
   code: string[]
   publish: boolean
+  "account-id": string
+  "api-token": string
+  url: string
 }
 
 const argv = yargs(process.argv.slice(2))
@@ -57,6 +61,25 @@ const argv = yargs(process.argv.slice(2))
         .alias("f", "fresh")
     },
     devCommand
+  )
+  .command<Args>(
+    "deploy-mcp",
+    "deploy an MCP server to Cloudflare for API access",
+    (yargs) => {
+      yargs
+        .string("account-id")
+        .describe("account-id", "Cloudflare account ID")
+        .demandOption("account-id")
+      yargs
+        .string("api-token")
+        .describe("api-token", "Cloudflare API token")
+        .demandOption("api-token")
+      yargs
+        .string("url")
+        .describe("url", "URL of the Moonwave documentation site")
+        .demandOption("url")
+    },
+    deployMcpCommand
   )
 
   .array("code")
