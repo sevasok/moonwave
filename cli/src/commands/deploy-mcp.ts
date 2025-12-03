@@ -12,12 +12,6 @@ const MCP_SERVER_CODE = `export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     
-    // Validate Origin header to prevent DNS rebinding attacks
-    const origin = request.headers.get('Origin');
-    if (origin && !isAllowedOrigin(origin)) {
-      return new Response('Forbidden', { status: 403 });
-    }
-    
     // MCP endpoint
     if (url.pathname === '/mcp' || url.pathname === '/mcp/') {
       if (request.method === 'POST') {
@@ -53,13 +47,6 @@ const MCP_SERVER_CODE = `export default {
     return new Response('Not Found', { status: 404 });
   }
 };
-
-function isAllowedOrigin(origin) {
-  // Allow localhost and common development origins
-  return origin.includes('localhost') || 
-         origin.includes('127.0.0.1') ||
-         origin.includes('.workers.dev');
-}
 
 function getCorsHeaders(request) {
   const origin = request.headers.get('Origin');
