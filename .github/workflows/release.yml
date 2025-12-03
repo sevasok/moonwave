@@ -111,7 +111,7 @@ jobs:
 
     - name: Build release binary
       working-directory: ./extractor
-      run: cargo build --verbose --locked --release
+      run: cargo build --verbose --release
     
     - name: Zip up binary
       shell: powershell
@@ -143,7 +143,7 @@ jobs:
       working-directory: ./extractor
       run: |
         source $HOME/.cargo/env
-        cargo build --verbose --locked --release
+        cargo build --verbose --release
       env:
         OPENSSL_STATIC: 1
 
@@ -172,7 +172,7 @@ jobs:
 
     - name: Build
       working-directory: ./extractor
-      run: cargo build --locked --verbose --release
+      run: cargo build --verbose --release
       env:
         OPENSSL_STATIC: 1
 
