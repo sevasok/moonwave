@@ -23,7 +23,7 @@
   "bugs": {
     "url": "https://github.com/sevasok/moonwave/issues"
   },
-  "homepage": "https://github.com/evaera/moonwave#readme",
+  "homepage": "https://github.com/sevasok/moonwave#readme",
   "type": "module",
   "dependencies": {
     "cachedir": "^2.3.0",

@@ -10,7 +10,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const packageConfig = fs.readJSONSync(path.join(__dirname, "../package.json"))
 const version = packageConfig.version
 
-const URL = `https://latest-github-release.eryn.io/evaera/moonwave/v${version}`
+const URL = `https://api.github.com/repos/sevasok/moonwave/releases/tags/v${version}`
 
 interface Asset {
   name: string
