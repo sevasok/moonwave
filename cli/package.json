@@ -16,12 +16,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/evaera/moonwave.git"
+    "url": "git+https://github.com/sevasok/moonwave.git"
   },
   "author": "eryn L. K. <e@eryn.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/evaera/moonwave/issues"
+    "url": "https://github.com/sevasok/moonwave/issues"
   },
   "homepage": "https://github.com/evaera/moonwave#readme",
   "type": "module",
