@@ -49,10 +49,20 @@ jobs:
         echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
         echo "New version: $NEW_VERSION"
 
+    - name: Update extractor Cargo.toml version
+      run: |
+        sed -i 's/^version = "[^"]*"/version = "${{ steps.get_version.outputs.version }}"/' extractor/Cargo.toml
+
+    - name: Update template package.json version
+      run: |
+        sed -i 's/"@sevasok\/docusaurus-plugin-moonwave": "\^[^"]*"/"@sevasok\/docusaurus-plugin-moonwave": "^${{ steps.get_version.outputs.version }}"/' cli/template/root/package.json
+
     - name: Commit version changes
       run: |
         git add cli/package.json cli/package-lock.json
         git add docusaurus-plugin-moonwave/package.json docusaurus-plugin-moonwave/package-lock.json
+        git add extractor/Cargo.toml
+        git add cli/template/root/package.json
         git commit -m "chore: release v${{ steps.get_version.outputs.version }}"
         git tag -a "v${{ steps.get_version.outputs.version }}" -m "Release v${{ steps.get_version.outputs.version }}"
         git push origin master
