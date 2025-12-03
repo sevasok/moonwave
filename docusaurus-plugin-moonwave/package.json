@@ -1,5 +1,5 @@
 {
-  "name": "docusaurus-plugin-moonwave",
+  "name": "@sevasok/docusaurus-plugin-moonwave",
   "version": "1.3.0",
   "description": "Display your API docs generated from Moonwave in Docusaurus",
   "main": "src/index.js",
