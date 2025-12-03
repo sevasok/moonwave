@@ -268,7 +268,7 @@ async function handleRequest(message, sessionId, env) {
       const { name, arguments: args } = params;
       
       // Fetch raw API data
-      const apiUrl = new URL('/api/raw', env.DOCS_URL);
+      const apiUrl = new URL('/raw', env.DOCS_URL);
       const response = await fetch(apiUrl.toString());
       const rawData = await response.json();
       

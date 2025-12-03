@@ -406,7 +406,7 @@ export default (context, options) => ({
     )
 
     addRoute({
-      path: baseUrl + "api/raw",
+      path: baseUrl + "raw",
       exact: true,
       component: resolve(__dirname, "components/RawData.js"),
       modules: {
