@@ -419,6 +419,8 @@ export function prepareProject(
       const packageJsonPath = path.join(tempDir, "package.json")
 
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"))
+      // Remove scoped package in dev mode and use unscoped local version
+      delete packageJson.dependencies["@sevasok/docusaurus-plugin-moonwave"]
       packageJson.dependencies["docusaurus-plugin-moonwave"] =
         moonwavePluginPath
           ? path.resolve(process.cwd(), moonwavePluginPath)

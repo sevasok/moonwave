@@ -455,6 +455,27 @@ export default (context, options) => ({
       })
     }
   },
+
+  async postBuild({ outDir, siteConfig }) {
+    const fs = require("fs")
+    const path = require("path")
+    
+    // Copy the raw API data as a static JSON file
+    const rawDataPath = path.join(
+      siteConfig.generatedFilesDir,
+      "docusaurus-plugin-moonwave",
+      "moonwave",
+      "rawData.json"
+    )
+    
+    if (fs.existsSync(rawDataPath)) {
+      const outputPath = path.join(outDir, "raw.json")
+      fs.copyFileSync(rawDataPath, outputPath)
+      console.log("Moonwave: Created /raw.json endpoint")
+    } else {
+      console.warn("Moonwave: Could not find rawData.json to copy")
+    }
+  },
 })
 
 export function validateOptions({ options }) {
@@ -499,23 +520,4 @@ export function validateOptions({ options }) {
   }
 
   return options
-}
-
-module.exports.postBuild = async function ({ outDir, siteConfig }) {
-  const fs = require("fs")
-  const path = require("path")
-  
-  // Copy the raw API data as a static JSON file
-  const rawDataPath = path.join(
-    siteConfig.generatedFilesDir,
-    "docusaurus-plugin-moonwave",
-    "moonwave",
-    "rawData.json"
-  )
-  
-  if (fs.existsSync(rawDataPath)) {
-    const outputPath = path.join(outDir, "raw.json")
-    fs.copyFileSync(rawDataPath, outputPath)
-    console.log("Moonwave: Created /raw.json endpoint")
-  }
 }
