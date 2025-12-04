@@ -456,13 +456,14 @@ export default (context, options) => ({
     }
   },
 
-  async postBuild({ outDir, siteConfig }) {
+  async postBuild({ outDir }) {
     const fs = require("fs")
     const path = require("path")
     
     // Copy the raw API data as a static JSON file
+    // The file was created in contentLoaded in .docusaurus directory
     const rawDataPath = path.join(
-      siteConfig.generatedFilesDir,
+      context.generatedFilesDir,
       "docusaurus-plugin-moonwave",
       "moonwave",
       "rawData.json"
