@@ -28,11 +28,11 @@ jobs:
 
     - name: Build
       working-directory: ./extractor
-      run: cargo build --locked --verbose
+      run: cargo build --verbose
 
     - name: Run tests
       working-directory: ./extractor
-      run: cargo test --locked --verbose
+      run: cargo test --verbose
 
     - name: Rustfmt and Clippy
       working-directory: ./extractor
