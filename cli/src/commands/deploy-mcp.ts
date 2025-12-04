@@ -267,9 +267,15 @@ async function handleRequest(message, sessionId, env) {
     if (method === 'tools/call') {
       const { name, arguments: args } = params;
       
-      // Fetch raw API data
-      const apiUrl = new URL('/raw', env.DOCS_URL);
-      const response = await fetch(apiUrl.toString());
+      // Fetch raw API data from raw.json
+      const docsUrl = env.DOCS_URL.endsWith('/') ? env.DOCS_URL.slice(0, -1) : env.DOCS_URL;
+      const apiUrl = \`\${docsUrl}/raw.json\`;
+      const response = await fetch(apiUrl);
+      
+      if (!response.ok) {
+        throw new Error(\`Failed to fetch raw.json: \${response.status} \${response.statusText}\`);
+      }
+      
       const rawData = await response.json();
       
       let content;
