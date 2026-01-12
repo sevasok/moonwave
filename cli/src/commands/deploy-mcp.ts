@@ -27,7 +27,9 @@ interface DeployMcpArgs {
   config?: string
 }
 
-const MCP_SERVER_CODE = `export default {
+const MCP_SERVER_CODE = `import DOC_SOURCES from './sources.json';
+
+export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     
@@ -48,7 +50,7 @@ const MCP_SERVER_CODE = `export default {
     
     // Info endpoint
     if (url.pathname === '/' && request.method === 'GET') {
-      const sources = JSON.parse(env.DOC_SOURCES || '[]');
+      const sources = DOC_SOURCES || [];
       return new Response(JSON.stringify({
         name: 'moonwave-mcp-server',
         version: '1.0.0',
@@ -79,7 +81,7 @@ function getCorsHeaders(request) {
 
 // Fetch and merge data from all sources
 async function fetchAllSources(env) {
-  const sources = JSON.parse(env.DOC_SOURCES || '[]');
+  const sources = DOC_SOURCES || [];
   const allData = [];
   
   for (const source of sources) {
@@ -351,7 +353,7 @@ async function handleRequest(message, sessionId, env) {
     // Handle tools/call
     if (method === 'tools/call') {
       const { name, arguments: args } = params;
-      const sources = JSON.parse(env.DOC_SOURCES || '[]');
+      const sources = DOC_SOURCES || [];
       
       // Handle list_sources without fetching data
       if (name === 'list_sources') {
@@ -505,10 +507,7 @@ async function handleRequest(message, sessionId, env) {
 
 const WRANGLER_TOML = `name = "moonwave-mcp-server"
 main = "src/index.js"
-compatibility_date = "2024-12-01"
-
-[vars]
-DOC_SOURCES = '%%DOC_SOURCES%%'`
+compatibility_date = "2024-12-01"`
 
 function extractNameFromUrl(url: string): string {
   try {
@@ -746,10 +745,14 @@ export default async function deployMcpCommand(args: DeployMcpArgs) {
       MCP_SERVER_CODE
     )
 
-    // Write wrangler.toml with the sources as JSON
-    const sourcesJson = JSON.stringify(sources).replace(/'/g, "\\'")
-    const wranglerConfig = WRANGLER_TOML.replace("%%DOC_SOURCES%%", sourcesJson)
-    fs.writeFileSync(path.join(tempDir, "wrangler.toml"), wranglerConfig)
+    // Write sources.json with the documentation sources
+    fs.writeFileSync(
+      path.join(tempDir, "src", "sources.json"),
+      JSON.stringify(sources, null, 2)
+    )
+
+    // Write wrangler.toml
+    fs.writeFileSync(path.join(tempDir, "wrangler.toml"), WRANGLER_TOML)
 
     console.log(`Moonwave: Deploying MCP server to Cloudflare...`)
     console.log(`Moonwave: Documentation sources:`)
