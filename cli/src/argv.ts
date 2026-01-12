@@ -3,6 +3,7 @@ import yargs from "yargs"
 import buildCommand from "./commands/build.js"
 import devCommand from "./commands/dev.js"
 import deployMcpCommand from "./commands/deploy-mcp.js"
+import extractGitHubCommand from "./commands/extract-github.js"
 
 const require = createRequire(import.meta.url)
 
@@ -17,6 +18,13 @@ export interface Args {
   "account-id": string
   "api-token": string
   url: string
+  "include-raw": string[]
+  "include-github": string[]
+  "extract-github": string[]
+  config: string
+  repo: string
+  branch: string
+  output: string
 }
 
 const argv = yargs(process.argv.slice(2))
@@ -76,10 +84,47 @@ const argv = yargs(process.argv.slice(2))
         .demandOption("api-token")
       yargs
         .string("url")
-        .describe("url", "URL of the Moonwave documentation site")
-        .demandOption("url")
+        .describe("url", "URL of the primary Moonwave documentation site")
+      yargs
+        .array("include-raw")
+        .string("include-raw")
+        .describe("include-raw", "Additional raw.json URLs to include (can be repeated)")
+      yargs
+        .array("include-github")
+        .string("include-github")
+        .describe("include-github", "GitHub repos with Moonwave docs, e.g. 'owner/repo' (can be repeated)")
+      yargs
+        .array("extract-github")
+        .string("extract-github")
+        .describe("extract-github", "GitHub repos to extract docs from at deploy time (for repos without raw.json)")
+      yargs
+        .string("config")
+        .describe("config", "Path to moonwave-mcp.json config file")
     },
     deployMcpCommand
+  )
+  .command<Args>(
+    "extract-github",
+    "extract raw.json documentation from a GitHub repository",
+    (yargs) => {
+      yargs
+        .string("repo")
+        .describe("repo", "GitHub repository (owner/repo) or full URL")
+        .demandOption("repo")
+      yargs
+        .string("branch")
+        .describe("branch", "Git branch to clone")
+        .default("branch", "main")
+      yargs
+        .array("code")
+        .string("code")
+        .describe("code", "Paths to Lua source code (auto-detected if not specified)")
+      yargs
+        .string("output")
+        .alias("o", "output")
+        .describe("output", "Output file path (prints to stdout if not specified)")
+    },
+    extractGitHubCommand
   )
 
   .array("code")
